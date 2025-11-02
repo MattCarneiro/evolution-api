@@ -1375,7 +1375,6 @@ export class BaileysStartupService extends ChannelStartupService {
             pushName: received.key.fromMe ? '' : received.key.fromMe == null ? '' : received.pushName,
             profilePicUrl: (await this.profilePicture(received.key.remoteJid)).profilePictureUrl,
             instanceId: this.instanceId,
-            isSaved: false,
           };
 
           if (contactRaw.remoteJid === 'status@broadcast') {
@@ -1407,8 +1406,7 @@ export class BaileysStartupService extends ChannelStartupService {
             if (this.configService.get<Database>('DATABASE').SAVE_DATA.CONTACTS)
               await this.prismaRepository.contact.upsert({
                 where: { remoteJid_instanceId: { remoteJid: contactRaw.remoteJid, instanceId: contactRaw.instanceId } },
-                create: contactRaw,
-                update: contactRaw,
+                data: contactRaw,
               });
 
             continue;
@@ -1420,7 +1418,7 @@ export class BaileysStartupService extends ChannelStartupService {
             await this.prismaRepository.contact.upsert({
               where: { remoteJid_instanceId: { remoteJid: contactRaw.remoteJid, instanceId: contactRaw.instanceId } },
               update: contactRaw,
-              create: contactRaw,
+              create: { ...contactRaw, isSaved: false }
             });
         }
       } catch (error) {
