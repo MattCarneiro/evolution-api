@@ -791,6 +791,7 @@ export class BaileysStartupService extends ChannelStartupService {
           pushName: contact?.name || contact?.verifiedName || contact.id.split('@')[0],
           profilePicUrl: null,
           instanceId: this.instanceId,
+          isSaved: true,
         }));
 
         if (contactsRaw.length > 0) {
@@ -827,6 +828,7 @@ export class BaileysStartupService extends ChannelStartupService {
             pushName: contact?.name || contact?.verifiedName || contact.id.split('@')[0],
             profilePicUrl: (await this.profilePicture(contact.id)).profilePictureUrl,
             instanceId: this.instanceId,
+            isSaved: true,
           })),
         );
 
@@ -1373,6 +1375,7 @@ export class BaileysStartupService extends ChannelStartupService {
             pushName: received.key.fromMe ? '' : received.key.fromMe == null ? '' : received.pushName,
             profilePicUrl: (await this.profilePicture(received.key.remoteJid)).profilePictureUrl,
             instanceId: this.instanceId,
+            isSaved: false,
           };
 
           if (contactRaw.remoteJid === 'status@broadcast') {
